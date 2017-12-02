@@ -64,14 +64,10 @@
 
 (defun get-states (lst finalList)
 
-
-	 ;(print finalList)
      (let ((stateList *50-states*)(lengthStatesList '()) (nextList '()) (fin finalList))
 
-          ;(print lst)
           (cond ((eql nil lst)
-          	   ;(print 'okay)
-          	   ;(print finalList)
+
                finalList
                )
                (t 
@@ -81,40 +77,25 @@
 
                (cond ((>= 1 (length (car lengthStatesList)))
                     ;(print 'found)
-                    ;(print (car stateList))
                     (setq finalList (append finalList (list (car (car stateList)))))
                     ;(print finalList)
-
                     (setq nextList (cdr stateList))
                     ;(print nextList)
-                    ;(setq finalList (append finalList (get-zero-one-states nextList finalList)))
-                    ;(print finalList)
                     (setq fin (get-states nextList finalList))
                     ;(print fin)
                     )
-
                     (t 
                          ;(print 'length_greater)
-                         ;(setq nextList (remove 0 stateList))
                          (setq nextList (cdr stateList))
-
                          ;(print nextList)
-                         ;(setq finalList (append finalList (get-zero-one-states nextList finalList)))
-                         ;(get-zero-one-states nextList finalList)
                          (setq fin (get-states nextList finalList))
                          ;(print fin)
-                    	 ;(print finalList)
                     )
                )
                )
           )
-          ;(remove nil finalList)
-          ;finalList
-          ;(values)
-          ;(print fin)
           fin
      )
      ;(values)
-     
 )
 
