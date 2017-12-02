@@ -122,7 +122,22 @@
 ;;                        Coloring Functions
 ;;-------------------------------------------------------------------
 
+;; takes the cutset list and returns the graph without the cutset
+(defun get-remaining(lst graph) (rm-vertices lst graph))
 
+;; takes a list of vertices and a graph and returns the list of
+;; vertices with their edges extracted from the entire graph
+(defun get-edges(lst graph)
+	;; takes a vertex and a graph and returns it with its edges
+	(defun get-edge-group(v graph)
+		(cond ((> (length graph) 0)
+			(cond ((eql v (car (car graph)))
+				(cons v (list (car (cdr (car graph))))))
+		    	(t (get-edge-group v (cdr graph)))))))
+	(cond ((> (length lst) 1)
+			(cons (get-edge-group (car lst) graph) 
+				  (get-edges (cdr lst) graph)))
+		    (t (list (get-edge-group (car lst) graph)))))
 
 ;;-------------------------------------------------------------------
 ;;                         Nikas Code
