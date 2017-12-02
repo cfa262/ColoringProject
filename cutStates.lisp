@@ -54,11 +54,11 @@
                     (WY (ID MT SD NE CO UT))))     ; WY = Wyoming
 
 (let ((finalList '()))
-(defun getZeroOneStates (lst)
+(defun get-zero-one-states (lst)
 
      (let ((stateList *50-states*)(lengthStatesList '())(nextList '()))
 
-          (print lst)
+          ;(print lst)
           (cond ((eql nil lst)
                lst
                )
@@ -68,10 +68,10 @@
                (setq lengthStatesList (cdr (car stateList)))
 
                (cond ((>= 1 (length (car lengthStatesList)))
-                    (print 'found)
+                    ;(print 'found)
                     ;(print (car stateList))
                     (setq finalList (append finalList (list (car (car stateList)))))
-                    (print finalList)
+                    ;(print finalList)
 
                     (setq nextList (cdr stateList))
                     ;(print nextList)
@@ -80,7 +80,7 @@
                     )
 
                     (t 
-                         (print 'length_greater)
+                         ;(print 'length_greater)
                          ;(setq nextList (remove 0 stateList))
                          (setq nextList (cdr stateList))
                          ;(print nextList)
