@@ -1,15 +1,16 @@
 ;; ---------------------
-;; Calvin Alvarez
-;; Andrew Morato
+;; Calvin
+;; Nika
+;; Andy
 ;; Map Coloring Project
 ;; December 6, 2017
 ;; ---------------------
 
 ;;-------------------------------------------------------------------
-;;                              Graphs
+;;                     Testing Graphs/Functions
 ;;-------------------------------------------------------------------
 
-;; build the states graph
+;; builds the states graph
 (defun states()
 	'((AL (GA FL MS TN))
 	(AK ())
@@ -63,28 +64,98 @@
 	(WI (MN IA  IL MI))
 	(WY (ID MT SD NE CO UT))))
 
+(defun graph-1()
+	'((A (B C E))
+	(B (A E F))
+	(C (A E F))
+	(D (F))
+	(E (A B C F))
+	(F (B C D E))))
+
+;; neatly prints the list
+(defun print-list(lst)
+	(dolist (x lst)
+		(print x))
+	(values))
+
 ;;-------------------------------------------------------------------
 ;;                         Cutset Functions
 ;;-------------------------------------------------------------------
 
-;; returns the cutset of the graph lst
-;;(defun get-cutset(lst)
-;;	(defun update-graph(lst) (rm-states (get-0-1-edges lst)))
-;;	(let ((graph (update-graph lst)))
-;;
-;;		)
-;;	)
+;; pseudo code
 
-;;returns the vertex with the highest degree
+;; update graph (rm all 0-1 degree vertices)
+	;; while graph is not empty
+	;; v = vertex w/highest degree
+	;; add v to cutset list
+	;; rm v from graph
+	;; update graph
+;; return cutset list
+
+;; returns the cutset of the graph 'lst'
+(defun get-cutset(lst)
+	(defun update-graph(lst) (rm-vertices (get-0-1-edges lst)))
+	
+	)
+
+;; returns the degree of the first element of lst
+(defun get-degree(lst)
+	(cond ((> (length lst) 0) 
+		(length (car (cdr (car lst))))) (t -1)))
+
+;; returns the vertex with the highest degree
 (defun get-high-deg(lst)
-	;;returns the degree of the first element of lst
-	(defun get-degree(lst)
-		(cond ((> (length lst) 0) 
-			(length (car (cdr (car lst))))) (t -1)))
-	(defun find-highest(high lst)
+	(defun find-highest(vertex high lst)
 		(let ((degree (get-degree lst))) 
-			(cond ((= degree -1) high)
+			(cond ((= degree -1) vertex)
 				(t (cond ((> degree high) 
-						(find-highest degree (cdr lst)))
-					  (t (find-highest high (cdr lst))))))))
-	(find-highest 0 lst))
+					 (find-highest (car (car lst)) degree (cdr lst)))
+					 (t (find-highest vertex high (cdr lst))))))))
+   (find-highest (car (car lst)) (length (car (cdr (car lst)))) lst))
+
+
+;;-------------------------------------------------------------------
+;;                        Coloring Functions
+;;-------------------------------------------------------------------
+
+
+
+;;-------------------------------------------------------------------
+;;                         Nikas Code
+;;-------------------------------------------------------------------
+
+;; emoves all vertices in a given states list from list lst
+(defun rm-vertices(vertices lst)
+	;; removes all occurences of a vertex from lst
+	(defun rm-vertex(vertex lst)
+		;; removes a vertex from a list if present
+		(defun rm-edge (vertex sublst)
+			(cond((null sublst) sublst)
+				(t (if (equal vertex (first sublst))
+					(remove vertex sublst)
+					;; else
+				    (append 
+						(list (first sublst)) 
+						(rm-edge vertex (rest sublst)))))))
+		;; removes list that begin with vertex
+		(setq lst (remove vertex lst :key #'first))
+		(cond ((> (length lst) 0) 
+			(append (list (append (list (car (car lst)))
+				    (list (rm-edge vertex (car (cdr (car lst)))))))
+				(rm-vertex vertex (cdr lst))))
+		  (t lst)))
+	(dolist (i vertices)
+		(setq lst (rm-vertex i lst)))
+	lst)
+
+;;-------------------------------------------------------------------
+;;                         Calvins Code
+;;-------------------------------------------------------------------
+
+;; gets a list of all vertices with 0 or 1 edges
+(defun get-0-1-edges(lst)
+	(cond ((> (length lst) 0)
+		(cond ((> 2 (get-degree lst)) 
+		 (append (list (car (car lst))) (get-0-1-edges (cdr lst))))
+			(t (get-0-1-edges (cdr lst)))))
+	  (t lst)))
