@@ -82,21 +82,25 @@
 ;;                         Cutset Functions
 ;;-------------------------------------------------------------------
 
-;; pseudo code
-
+;; returns the cutset of the graph 'lst', pseudo code:
 ;; update graph (rm all 0-1 degree vertices)
-	;; while graph is not empty
+;; while graph is not empty
 	;; v = vertex w/highest degree
 	;; add v to cutset list
 	;; rm v from graph
 	;; update graph
 ;; return cutset list
-
-;; returns the cutset of the graph 'lst'
 (defun get-cutset(lst)
-	(defun update-graph(lst) (rm-vertices (get-0-1-edges lst)))
-	
-	)
+	(defun update-graph(lst) 
+		(let ((updated (rm-vertices (get-0-1-edges lst) lst)))
+			(cond ((eql (get-0-1-edges updated) NIL) updated) 
+				(t (update-graph updated)))))
+	(defun cutset(lst) 
+		(cond ((> (length lst) 0)
+			(let ((v (get-high-deg lst))) (cons v 
+		 		(get-cutset (update-graph (rm-vertex v lst))))))
+		    (t lst)))
+	(cutset (update-graph lst)))
 
 ;; returns the degree of the first element of lst
 (defun get-degree(lst)
@@ -124,26 +128,26 @@
 ;;                         Nikas Code
 ;;-------------------------------------------------------------------
 
-;; emoves all vertices in a given states list from list lst
+;; removes all occurences of a vertex from lst
+(defun rm-vertex(vertex lst)
+	;; removes a vertex from a list if present
+	(defun rm-edge (vertex sublst)
+		(cond((null sublst) sublst)
+			(t (if (equal vertex (first sublst)) 
+				(remove vertex sublst)
+				;; else
+			    (cons (first sublst) 
+			    	(rm-edge vertex (rest sublst)))))))
+	;; removes list that begin with vertex
+	(setq lst (remove vertex lst :key #'first))
+	(cond ((> (length lst) 0) 
+		(cons (cons (car (car lst))
+			  (list (rm-edge vertex (car (cdr (car lst))))))
+			(rm-vertex vertex (cdr lst))))
+	  (t lst)))
+
+;; removes all vertices in a given states list from list lst
 (defun rm-vertices(vertices lst)
-	;; removes all occurences of a vertex from lst
-	(defun rm-vertex(vertex lst)
-		;; removes a vertex from a list if present
-		(defun rm-edge (vertex sublst)
-			(cond((null sublst) sublst)
-				(t (if (equal vertex (first sublst))
-					(remove vertex sublst)
-					;; else
-				    (append 
-						(list (first sublst)) 
-						(rm-edge vertex (rest sublst)))))))
-		;; removes list that begin with vertex
-		(setq lst (remove vertex lst :key #'first))
-		(cond ((> (length lst) 0) 
-			(append (list (append (list (car (car lst)))
-				    (list (rm-edge vertex (car (cdr (car lst)))))))
-				(rm-vertex vertex (cdr lst))))
-		  (t lst)))
 	(dolist (i vertices)
 		(setq lst (rm-vertex i lst)))
 	lst)
@@ -156,6 +160,6 @@
 (defun get-0-1-edges(lst)
 	(cond ((> (length lst) 0)
 		(cond ((> 2 (get-degree lst)) 
-		 (append (list (car (car lst))) (get-0-1-edges (cdr lst))))
+		 (cons (car (car lst)) (get-0-1-edges (cdr lst))))
 			(t (get-0-1-edges (cdr lst)))))
 	  (t lst)))
