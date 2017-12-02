@@ -1,3 +1,5 @@
+
+
 ;;removes all occurences of a state from list lst
 (defun rm-state(state lst)
 	(setq lst (remove state lst :key #'first));;removes the sublist that starts with the state to be removed (aka removes the state and all its connections)
@@ -16,8 +18,9 @@
 ;;removes all states in a given states list from list lst
 (defun rm-states(states lst)
 	(dolist (i states)
-		(rm-state i lst)
+		(setq lst (rm-state i lst))
 	)
+	lst
 )
 
 
