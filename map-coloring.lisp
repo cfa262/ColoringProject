@@ -64,6 +64,7 @@
 	(WI (MN IA  IL MI))
 	(WY (ID MT SD NE CO UT))))
 
+;; builds another, simpler graph
 (defun graph-1()
 	'((A (B C E))
 	(B (A E F))
@@ -71,6 +72,9 @@
 	(D (F))
 	(E (A B C F))
 	(F (B C D E))))
+
+;; sets the usable colors
+(defun colors() '(r b g y))
 
 ;; neatly prints the list
 (defun print-list(lst)
@@ -138,6 +142,38 @@
 			(cons (get-edge-group (car lst) graph) 
 				  (get-edges (cdr lst) graph)))
 		    (t (list (get-edge-group (car lst) graph)))))
+
+;; takes the cutset and its colors, of the form ((X R) (Y B) etc), &
+;; the graph and returns possible colors for the remaining vertices
+;; PLS IGNORE THIS, REMOVE IF IT DOES NOT COMPILE
+(defun get-possible-colors(lst graph)
+	;; fills the graph will all color options
+	(defun fill-graph(graph)
+		(cond ((> (length graph) 0)
+			(cons (append (car graph) (list (colors))) 
+				  (fill-graph (cdr graph))))
+			(t graph)))
+	;; takes a cutset color list (specified above) and removes those
+	;; colors from connecting vertices in the graph
+	(defun rm-colors(lst graph)
+		(defun rm-lst(rm lst) 
+			(cond ((and (> (length lst) 0) (> (length rm) 0))
+				(rm-lst (cdr rm) (remove (car rm) lst)))
+				(t lst)))
+		(defun rm-color(color v)
+				(cons (car v) (cons (car (cdr v)) 
+					  (list (remove color (car (cdr (cdr v))))))))
+		(defun has-edges(v edges))
+			(cond ((> (length graph) 0) 
+				(cond ((eql (find (car v) (car (cdr (car graph)))) NIL)
+					(cons (car graph) (list (rm-color v (cdr graph))))
+					(t (cons (rm-c )))
+					)) 
+				(t graph))
+			)
+
+		)
+	)
 
 ;;-------------------------------------------------------------------
 ;;                         Nikas Code
