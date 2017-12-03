@@ -178,13 +178,16 @@
 	;; given a colored cutset list, this returns a {v, e, c}
 	;; without any conflicting colors
 	(defun rm-colors(lst v)
-		;; removes a color in {v, e, c}
-		(defun rm-color(color v)
-			(cons (car v) (cons (car (cdr v)) 
+		;; removes a color in {v, e, c} and its corresponding vertex
+		(defun rm-color(edge color v)
+			;; removes an e from a {v, e, c}
+			(defun rm-edge(edge v) (remove edge (car (cdr v))))
+			(cons (car v) (cons (rm-edge edge v) 
 				  (list (remove color (car (cdr (cdr v))))))))
 		(cond ((> (length lst) 0)
 			(cond ((has-edge (car (car lst)) v)
-				(rm-colors (cdr lst) (rm-color (nth 1 (car lst)) v)))
+				(rm-colors (cdr lst) 
+					(rm-color (car (car lst)) (nth 1 (car lst)) v)))
 				(t (rm-colors (cdr lst) v))))
 			(t v)))
 	;; runs rm-colors for every {v, e, c} in the graph
@@ -193,7 +196,7 @@
 			(cons (rm-colors lst (car graph))
 				  (get-remaining-colors lst (cdr graph))))
 			(t graph)))
-	(get-remaining-colors lst (fill-graph graph)))
+		(get-remaining-colors lst (fill-graph graph)))
 
 ;;-------------------------------------------------------------------
 ;;                         Nikas Code
