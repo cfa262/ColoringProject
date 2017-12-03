@@ -1,0 +1,53 @@
+
+Definitions
+
+	Graph - a list of vertices and thier edges.
+	        get by calling (states) or (graph-1)
+
+	Cutset - a list of the cutset of the form
+	         (fl va ca or ak)
+
+	Colored Cutset list - a list of the cutset and
+	                      the colors that it has been
+	                      colored. Looks like:
+	                      ((fl r) (ga y) ....)
+
+	Colors - colors that we will use, call (colors)
+	         to get the list (r g b y)        
+
+	Remaining/Trees - the remaining vertices and their
+	                  edges after the cutset was removed
+
+	{v, e, c} - a list of the form (va (ma dc wv tn nc) (r b))
+	            that has the vertex, its edges, and the
+	            possible colors it can be colored           
+
+How to run big functions/what do they do
+
+	get-cutset(lst)
+		-takes a graph as lst
+		-returns its cutset
+
+	get-high-deg(lst)
+		-takes a graph
+		-returns the first element with the highest
+		 degree (most edges) in the graph
+
+	get-remaining(lst graph)
+		-takes a cutset as lst and a graph
+		-return the remaining trees
+
+	get-edges
+		-takes a cutset as lst and a graph
+		-returns a list of the cutset and its edges
+
+	get-possible-colors(lst graph)
+		-takes a colored cutset list as list and a graph
+		-returns a remaining graph with the possible colors
+		 each vertex can be after removing the colors from the
+		 bordering elements in the colored cutset list. Essentially
+		 returns a proper {v, e, c}
+
+NOTE: If you need a specific function, ask if it is already written first,
+      Most of the functions above have a lot of helpers that can be
+      relevant to other functions
