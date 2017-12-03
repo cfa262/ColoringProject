@@ -127,7 +127,18 @@
 ;;-------------------------------------------------------------------
 
 ;; takes the cutset list and returns the graph without the cutset
-(defun get-remaining(lst graph) (rm-vertices lst graph))
+;; vertices but with the cutset vertices as edges for other vertices
+(defun get-remaining(lst graph) 
+	(defun is-cutset(lst v)
+		(cond ((> (length lst) 0)
+			(cond ((eql (car lst) (car v)) t)
+				(t (is-cutset (cdr lst) v))))
+			(t NIL)))
+	(cond ((> (length graph) 0)
+		(cond ((is-cutset lst (car graph))
+			(get-remaining lst (cdr graph)))
+			(t (cons (car graph) (get-remaining lst (cdr graph))))))
+		(t graph)))
 
 ;; takes a list of vertices and a graph and returns the list of
 ;; vertices with their edges extracted from the entire graph
@@ -145,7 +156,6 @@
 
 ;; takes the cutset and its colors, of the form ((X R) (Y B) etc), &
 ;; the graph and returns possible colors for the remaining vertices
-;; PLS IGNORE THIS, REMOVE IF IT DOES NOT COMPILE
 (defun get-possible-colors(lst graph)
 	;; fills the graph will all color options
 	(defun fill-graph(graph)
@@ -153,27 +163,37 @@
 			(cons (append (car graph) (list (colors))) 
 				  (fill-graph (cdr graph))))
 			(t graph)))
-	;; takes a cutset color list (specified above) and removes those
-	;; colors from connecting vertices in the graph
-	(defun rm-colors(lst graph)
-		(defun rm-lst(rm lst) 
-			(cond ((and (> (length lst) 0) (> (length rm) 0))
-				(rm-lst (cdr rm) (remove (car rm) lst)))
-				(t lst)))
+	;; rm's elements in list rm from lst
+	(defun rm-lst(rm lst) 
+		(cond ((and (> (length lst) 0) (> (length rm) 0))
+			(rm-lst (cdr rm) (remove (car rm) lst)))
+			(t lst)))
+	(defun has-edge(edge v)
+		(defun has-e(edge v)
+			(cond ((> (length v) 0) 
+				(cond ((eql edge (car v)) t)
+					(t (has-e edge (cdr v)))))
+				(t NIL)))
+			(has-e edge (car (cdr v))))
+	;; given a colored cutset list, this returns a {v, e, c}
+	;; without any conflicting colors
+	(defun rm-colors(lst v)
+		;; removes a color in {v, e, c}
 		(defun rm-color(color v)
-				(cons (car v) (cons (car (cdr v)) 
-					  (list (remove color (car (cdr (cdr v))))))))
-		(defun has-edges(v edges))
-			(cond ((> (length graph) 0) 
-				(cond ((eql (find (car v) (car (cdr (car graph)))) NIL)
-					(cons (car graph) (list (rm-color v (cdr graph))))
-					(t (cons (rm-c )))
-					)) 
-				(t graph))
-			)
-
-		)
-	)
+			(cons (car v) (cons (car (cdr v)) 
+				  (list (remove color (car (cdr (cdr v))))))))
+		(cond ((> (length lst) 0)
+			(cond ((has-edge (car (car lst)) v)
+				(rm-colors (cdr lst) (rm-color (nth 1 (car lst)) v)))
+				(t (rm-colors (cdr lst) v))))
+			(t v)))
+	;; runs rm-colors for every {v, e, c} in the graph
+	(defun get-remaining-colors(lst graph)
+		(cond ((> (length graph) 0) 
+			(cons (rm-colors lst (car graph))
+				  (get-remaining-colors lst (cdr graph))))
+			(t graph)))
+	(get-remaining-colors lst (fill-graph graph)))
 
 ;;-------------------------------------------------------------------
 ;;                         Nikas Code
