@@ -18,12 +18,12 @@
 ;;returns something like ((FL r) (AZ g) (OK b) (NJ r))
 ;;available for use: function (colors) which returns list (r b g y), get-edges which returns edges for any vertex
 (defun color-minimally (vertices graph)
-	(let ((no-r-list (list))))
-	(let ((no-b-list (list))))
-	(let ((no-g-list (list))))
-	(let ((no-y-list (list))))
-	(let ((vertex-edges (get-edges vertices graph))))
-	(let (final-list (list)))
+	(let (no-r-list (list))
+	(no-b-list (list))
+	(no-g-list (list))
+	(no-y-list (list))
+	(vertex-edges (get-edges vertices graph))
+	(final-list (list))
 	(dolist (i vertices)
 		;;color stuff and add to the final list
 		(cond
@@ -43,6 +43,7 @@
 	)
 	(setq final-list (remove nil final-list))
 	final-list
+	)
 )
 
 ;;(cond
@@ -65,3 +66,5 @@
 	;;									(setq no-g-list(append no-g-list (get-connections i vertices vertex-edges)));;add all its edges into the no-yellow list
 		;;							))
 ;;)
+
+(let ((x 4) (y 5)) (print (+ x y)))
