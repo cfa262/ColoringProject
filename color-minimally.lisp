@@ -18,26 +18,21 @@
 ;;returns something like ((FL r) (AZ g) (OK b) (NJ r))
 ;;available for use: function (colors) which returns list (r b g y), get-edges which returns edges for any vertex
 (defun color-minimally (vertices graph)
-	(let ((no-r-list (list))
-	(no-b-list (list))
-	(no-g-list (list))
-	(no-y-list (list))
-	(vertex-edges (get-edges vertices graph))
-	(final-list (list)))
+	(let ((no-r-list (list))(no-b-list (list))(no-g-list (list))(no-y-list (list))(vertex-edges (get-edges vertices graph))(final-list (list)))
 	
 	(dolist (i vertices)
 		;;color stuff and add to the final list
 		(cond
-			((equal NIL (find i no-r-list)) (progn(setq final-list (append final-list (list (append (list i)(list (position 0 (colors)))))));;if not in the no-red list, color state red
+			((equal NIL (find i no-r-list)) (progn(setq final-list (append final-list (list (append (list i)(list 'r)))));;if not in the no-red list, color state red
 												(setq no-r-list(append no-r-list (get-connections i vertices vertex-edges)));;add all its edges into the no-red list
 											))	
-			((equal NIL (find i no-b-list)) (progn(setq final-list (append final-list (list (append (list i)(list (position 1 (colors)))))));;if not in the no-blue list, color state blue
+			((equal NIL (find i no-b-list)) (progn(setq final-list (append final-list (list (append (list i)(list 'b)))));;if not in the no-blue list, color state blue
 												(setq no-b-list(append no-b-list (get-connections i vertices vertex-edges)));;add all its edges into the no-blue list
 											))	
-			((equal NIL (find i no-g-list)) (progn(setq final-list (append final-list (list (append (list i)(list (position 2 (colors)))))));;if not in the no-green list, color state green
+			((equal NIL (find i no-g-list)) (progn(setq final-list (append final-list (list (append (list i)(list 'g)))));;if not in the no-green list, color state green
 												(setq no-g-list(append no-g-list (get-connections i vertices vertex-edges)));;add all its edges into the no-green list
 											))	
-			(t (progn(setq final-list (append final-list (list (append (list i)(list (position 3 (colors)))))));;if not in the no-yellow list, color state yellow
+			(t (progn(setq final-list (append final-list (list (append (list i)(list 'y)))));;if not in the no-yellow list, color state yellow
 												(setq no-y-list(append no-y-list (get-connections i vertices vertex-edges)));;add all its edges into the no-yellow list
 											))
 		)
