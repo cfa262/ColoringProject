@@ -1,0 +1,50 @@
+
+Notes on Lisp
+
+Lists
+
+	Declare Lists: (SETF <var> (list 1 2 3 4))
+	Result:
+		> <var>
+		> 1 2 3 4
+
+	Append to Lists: (SETF <var> (append <var> '(1 2 3 ...)))
+	Result:
+		If pre-existing list was 1 2 3 4
+		> <var>
+		> 1 2 3 4 1 2 3
+
+Misc
+
+	With proper syntax, apply returns the sum of a list:
+		> (apply #'+ (list 1 2 3 4 5))
+		> 15
+
+	Mapcar applies the specified function to the list;
+		> (defun cat(x) (+ 3 x))
+		> (mapcar 'cat '(1 2 3 4 5))
+		> (4 5 6 7 8)
+
+Cond
+
+ 	(cond ((conditional 1) (do this))
+
+ 		  ((conditional 2) (do this))
+
+ 		  (t) (do this)) ;;this acts as the else
+
+Set/Let
+
+	Setf is a global var, can be messed with in other functions
+	Let is essentially a local variable
+
+	ex1:
+		(let ((x 1))
+			(let ((x 2))
+				(let ((x 3))
+				(princ x))
+			(princ x))
+		(princ x))
+
+	ex2:
+		(let ((x 4) (y 5)) (print (+ x y)))
