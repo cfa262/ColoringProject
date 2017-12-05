@@ -1,4 +1,4 @@
 # ColoringProject
 Coloring Project
 
-Solves minimallly coloring an undirected graph using the NP-Complete coloring algorithm.
+Solves minimally coloring an undirected graph using the NP-Complete coloring algorithm.
