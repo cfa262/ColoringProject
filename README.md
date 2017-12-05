@@ -1,4 +1,4 @@
 # ColoringProject
 Coloring Project
 
-cutStates.lisp - Creates and returns a states list with zero or one adjacent states
+Solves the coloring of a graph using minamal number of colors using the NP-Complete coloring algorithm.
