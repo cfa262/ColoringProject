@@ -316,16 +316,16 @@ finalList))
 ;; input takes a colored solution list and a graph to be tested
 (defun test-solution (lst graph)
 	(dolist (x lst)
-		(setf color (cdr x)) 					                       ;;sets color to be checked
+		(setf color (cdr x)) 					               ;;sets color to be checked
 		(setf element (list (car x)))			                       ;;sets element to find
 		(print (list 'vertex element ': 'color 'to 'check color))
-		(dolist (y graph) 						                       ;;loops through graph
-			(cond ((equal element (list (car y)))                      ;;finds the specific vertex 
-					(setf el (car (cdr y)))                            ;;gets the list of edges
+		(dolist (y graph) 						       ;;loops through graph
+			(cond ((equal element (list (car y)))                          ;;finds the specific vertex 
+					(setf el (car (cdr y)))                        ;;gets the list of edges
 					(print (list 'list 'of 'edges ': el))
-					(dolist (z el)                                     ;;loops through list of edges
+					(dolist (z el)                                         ;;loops through list of edges
 						(dolist (vertex lst)	                       ;;loops through solved solution list	
-							(cond ((equal z (car vertex))  			   ;;finds edge and vertex match
+							(cond ((equal z (car vertex))          ;;finds edge and vertex match
 									(print (list 'checking 'vertex ': (car vertex)))
 									(cond ((equal color (cdr vertex))   ;;checks if there is a color conflict	
 										(print 'conflict)) 
