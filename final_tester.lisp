@@ -275,52 +275,46 @@
 
 
 
-;;lst would be in the cutset form '((A R) (E G))
+;;input colored list in the cutset form '((A R) (E G))
 (defun color-non-cutset(lst graph)
 	(let ((finalList lst)(orderedList '())(coloredList '())(remainList '())(verticesList '()))
 
 		;creates a list of non-cutset vertices to be ordered
-		(defun get-new-list (lst graph)
+		(defun get-non-cutset-list (lst graph)
 			(setq verticesList '())
 			(dolist (i lst)
 				(setq verticesList (append verticesList (list (car i)))))
 			(setq remainList (get-remaining verticesList graph))	
-			(order-tree-vertices remainList))
+			(order-vertices remainList))
 
-		;orders non-cutset vertices tree
-		(defun order-tree-vertices (lst)		
-			;;gets the highest deg of the non-cutset and colors it first
+		;orders non-cutset vertices
+		(defun order-vertices (lst)		
+			;;gets the highest deg of the non-cutset. This will be colored first
 			(setq orderedList (list (get-high-deg lst)))
 			(color-vertex orderedList))
 
-		;randomly colors first vertex given by ordered tree 
+		;colors the ordered vertex and appends to final list
 		(defun color-vertex (lst)		
 			(setq coloredList lst)
-			;;loops and find the vertex to color
+			;;loops through all possible vertices/edges with their possible colors
 			(dolist (x (get-possible-colors finalList graph))
-				(cond ((equal lst (list (car x)))
-					;randomly colors the vertex
-					(setq coloredList (append coloredList (list (car (car (cdr (cdr x))))))))))
-			(cond ((not(equal nil (car coloredList)))
-				(setq finalList (append finalList (list coloredList)))
-				;;loops back to top with new list of colored vertices
-				(get-new-list finalList graph))))
-		(get-new-list lst graph)
+				(cond ((equal lst (list (car x)))  ;;finds the matched vertex
+					;colors the vertex
+					(setq coloredList (append coloredList (list (car (car (cdr (cdr x))))))))))   
+			(cond ((not(equal nil (car coloredList)))  ;;checks if a vertex can be colored
+				;;adds colored vertex to the final colored list 
+				(setq finalList (append finalList (list coloredList)))   
+				;;loops back to get-non-cutset method with new list of colored vertices
+				(get-non-cutset-list finalList graph))))
+		(get-non-cutset-list lst graph)
 finalList))
 
-
+;;solves using tree coloring algorithm and returns colored solution list
 (defun solve-graph (lst)
+	(color-non-cutset (color-minimally (get-cutset lst) lst) lst))
 
-
-	(print (color-non-cutset (color-minimally (get-cutset lst) lst) lst))
-	
-	
-	(test-solution (color-non-cutset (color-minimally (get-cutset lst) lst) lst) lst)
-;(values)
-)
-
+;; input takes a colored solution list and a graph to be tested
 (defun test-solution (lst graph)
-
 	(dolist (x lst)
 		(setf color (cdr x)) 					                       ;;sets color to be checked
 		(setf element (list (car x)))			                       ;;sets element to find
@@ -336,10 +330,9 @@ finalList))
 									(cond ((equal color (cdr vertex))   ;;checks if there is a color conflict	
 										(print 'conflict)) 
 									(t (print (list 'picked 'solution 'color ': (cdr vertex))) 
-									(print 'okay)))))))))))             ;;prints okay if no conflicts			
+							(print 'okay)))))))))))             ;;prints okay if no conflicts			
 	(values))
 	
-
 
 
 
