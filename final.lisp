@@ -6,8 +6,10 @@
 ;; December 6, 2017
 ;; ---------------------
 
-;; NOTE: The line immediately above each function definition
-;;       contains the name of its author
+;; NOTE: The lines immediately above each function definition
+;;       contain the name of its author.
+;;       There is a guide at the bottom of this document that
+;;       describes some functions and how to run them
 
 
 ;; takes a graph an returns a list of coloring assignments
@@ -387,3 +389,71 @@ finalList))
 							 ;;prints okay if no conflicts	
 							(print 'okay)))))))))))		
 	(values))
+
+;;-------------------------------------------------------------------
+;;                         Documentation
+;;-------------------------------------------------------------------
+
+;; This is a list of some functions, what they do, and how to run
+;; them. To obtain the graphs (lists of the states/other graphs),
+;; call (states) to get the representation of the us and (graph-1)
+;; to get a smaller graph 
+
+
+;; get-cutset(lst)
+;;		-takes a graph as lst
+;;		-returns its cutset
+;; example: (get-cutset (states))
+
+
+;;	get-high-deg(lst)
+;;		-takes a graph
+;;		-returns the first element with the highest
+;;		 degree (most edges) in the graph
+;; example: (get-high-deg (states))
+
+
+;;	get-remaining(lst graph)
+;;		-takes a cutset as lst and a graph
+;;		-return the remaining trees
+;; example: (get-remaining (get-cutset (states)) (states))
+
+
+;;	get-edges(lst graph)
+;;		-takes a cutset as lst and a graph
+;;		-returns a list of the cutset and its edges
+;; example: (get-edges (get-cutset (states)) (states))
+
+
+;;	color-minmally(vertices graph)
+;;		-takes a cutset as vertices and a graph
+;;		-return a list with the cutset and its color assignments
+;;		 (example: ((FL R) (CO B) (AK Y)))
+;; example: (color-minimally (get-cutset (states)) (states))
+
+
+;;	get-possible-colors(lst graph)
+;;		-takes a colored cutset list as lst and a graph
+;;		-returns a remaining graph with the possible colors
+;;		 each vertex can be after removing the colors from the
+;;		 bordering elements in the colored cutset list. Essentially
+;;		 returns a list of lists like: (FL (AK TX GA) (R B Y))
+;; example: (get-possible-colors (color-minimally (get-cutset 
+;;          (states)) (states)) (states))
+
+
+;;	color-non-cutset(lst graph)
+;;		-takes a colored cutset list as lst and a graph
+;;		-returns color assignments to all the vertices in graph,
+;;		 a list of the form ((AK R) (AL Y) (RI G) etc)
+;; example: (get-possible-colors (color-minimally (get-cutset 
+;;          (states)) (states)) (states)) 
+
+
+;;	color-graph(graph)
+;;		-takes in a graph
+;;		-returns color assignments to all the vertices in graph,
+;;		 a list of the form ((AK R) (AL Y) (RI G) etc)
+;;		-Essentially combines all the functions to solve the
+;;		 map-coloring problem
+;; example: (color-graph (states))
